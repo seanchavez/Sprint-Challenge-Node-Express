@@ -34,4 +34,21 @@ server.get('/api/projects/:id', (req, res) => {
     });
 });
 
+server.post('/api/projects',(req, res) => {
+  const name = req.body.name;
+  if (!name || name.length > 128 || !req.body.description) {
+    res.status(400)
+      .json({ message: "Please provide a project name up to 128 characters long and a description of the project"});
+    return;
+  }
+  projectDb.insert(req.body)
+    .then(response => {
+      res.status(201).json(response);
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "There was an error saving the project to the database"});
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
