@@ -115,4 +115,33 @@ server.get('/api/projects/:id/actions/', (req, res) => {
     });
 });
 
+//============Actions============
+
+server.get('/api/actions', (req, res) => {
+  actionDb.get()
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "The actions information could not be retrieved"});
+    });
+});
+
+server.get('/api/actions/:id', (req, res) => {
+  actionDb.get(req.params.id)
+    .then(response => {
+      if (!response) {
+        res.status(404)
+          .json({ message: "The action with the specified ID does not exist" });
+      } else {
+        res.status(200).json(response);
+      } 
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "The action information could not be retrieved"});
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
