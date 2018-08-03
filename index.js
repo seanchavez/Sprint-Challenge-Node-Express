@@ -161,4 +161,20 @@ server.post('/api/actions',(req, res) => {
     });
 });
 
+server.delete('/api/actions/:id', (req,res) => {
+  actionDb.remove(req.params.id)
+    .then(response => {
+      if (response === 0) {
+        res.status(404)
+          .json({ message: "The action with the specified ID does not exist"});
+      } else {
+        res.status(200);
+      }
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "The action could not be deleted" });
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
