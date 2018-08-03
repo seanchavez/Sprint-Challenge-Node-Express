@@ -1,12 +1,15 @@
 const express = require('express');
-const projectDb = require('./data/helpers/projectModel');
+//const projectDb = require('./data/helpers/projectModel');
+const projectRouter = require('./routers/projectRouter');
 const actionDb = require('./data/helpers/actionModel');
 
 const server = express();
 server.use(express.json());
 
-//===========Projects===========
+server.use('/api/projects', projectRouter);
 
+//===========Projects===========
+/*
 server.get('/api/projects', (req, res) => {
   projectDb.get()
     .then(response => {
@@ -114,7 +117,7 @@ server.get('/api/projects/:id/actions/', (req, res) => {
       res.status(500).json({ error: "The projects could not be retrieved" });
     });
 });
-
+*/
 //============Actions============
 
 server.get('/api/actions', (req, res) => {
@@ -148,7 +151,7 @@ server.post('/api/actions',(req, res) => {
   const description = req.body.description;
   if (!description || description.length > 128 || !req.body.notes) {
     res.status(400)
-      .json({ message: "Please provide a desription up to 128 characters long and notes"});
+      .json({ message: "Please provide a description up to 128 characters long and some notes"});
     return;
   }
   actionDb.insert(req.body)
