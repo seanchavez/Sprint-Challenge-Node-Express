@@ -177,4 +177,26 @@ server.delete('/api/actions/:id', (req,res) => {
     });
 });
 
+server.put('/api/actions/:id', (req, res) => {
+  const description = req.body.description;
+  if (!description || description.length > 128 || !req.body.notes) {
+    res.status(400)
+      .json({ message: "Please provide a description up to 128 characters long and some notes"});
+    return;
+  }
+  actionDb.update(req.params.id, req.body)
+    .then(response => {
+      if (!response) {
+        res.status(404)
+          .json({ message: "The action with the specified ID does not exist" });
+      } else {
+        res.status(200);
+      }
+    })
+    .catch(() => {
+      res.status(500)
+        .json({ error: "The action information could not be modified"});
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
