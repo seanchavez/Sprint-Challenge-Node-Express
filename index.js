@@ -51,4 +51,20 @@ server.post('/api/projects',(req, res) => {
     });
 });
 
+server.delete('/api/projects/:id', (req,res) => {
+  projectDb.remove(req.params.id)
+    .then(response => {
+      if (response === 0) {
+        res.status(404)
+          .json({ message: "The project with the specified ID does not exist"});
+      } else {
+        res.status(200);
+      }
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "The project could not be deleted" });
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
