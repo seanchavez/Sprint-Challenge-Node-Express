@@ -1,12 +1,14 @@
 const express = require('express');
 //const projectDb = require('./data/helpers/projectModel');
 const projectRouter = require('./routers/projectRouter');
-const actionDb = require('./data/helpers/actionModel');
+//const actionDb = require('./data/helpers/actionModel');
+const actionRouter = require('./routers/actionRouter');
 
 const server = express();
 server.use(express.json());
 
 server.use('/api/projects', projectRouter);
+server.use('/api/actions', actionRouter);
 
 //===========Projects===========
 /*
@@ -119,7 +121,7 @@ server.get('/api/projects/:id/actions/', (req, res) => {
 });
 */
 //============Actions============
-
+/*
 server.get('/api/actions', (req, res) => {
   actionDb.get()
     .then(response => {
@@ -201,5 +203,5 @@ server.put('/api/actions/:id', (req, res) => {
         .json({ error: "The action information could not be modified"});
     });
 });
-
+*/
 server.listen(8000, () => console.log('API running on port 8000'));
