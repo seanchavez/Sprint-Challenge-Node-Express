@@ -144,4 +144,21 @@ server.get('/api/actions/:id', (req, res) => {
     });
 });
 
+server.post('/api/actions',(req, res) => {
+  const description = req.body.description;
+  if (!description || description.length > 128 || !req.body.notes) {
+    res.status(400)
+      .json({ message: "Please provide a desription up to 128 characters long and notes"});
+    return;
+  }
+  actionDb.insert(req.body)
+    .then(response => {
+      res.status(201).json(response);
+    })
+    .catch(err => {
+      res.status(500)
+        .json({ error: "There was an error saving the action to the database"});
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
