@@ -89,4 +89,30 @@ server.put('/api/projects/:id', (req, res) => {
     });
 });
 
+server.get('/api/projects/:id/actions/', (req, res) => {
+  const id = req.params.id;
+  projectDb.get(id)
+    .then(response => {
+      if (!response) {
+        res.status(404).json({ message: "The project with the specified ID does not exist"})
+      } else {
+        projectDb.getProjectActions(id)
+          .then(response => {
+            if (response.length === 0) {
+              res.status(404)
+                .json({ message: "There are no actions associated with the specified project" });
+            } else {
+              res.status(200).json(response);
+            }
+          })
+          .catch(err => {
+            res.status(500).json({ error: "The actions could not be retrieved" });
+          });
+      };
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The projects could not be retrieved" });
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
