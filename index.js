@@ -67,4 +67,26 @@ server.delete('/api/projects/:id', (req,res) => {
     });
 });
 
+server.put('/api/projects/:id', (req, res) => {
+  const name = req.body.name;
+  if (!name || name.length > 128 || !req.body.description) {
+    res.status(400)
+      .json({ message: "Please provide a project name up to 128 characters long and a description of the project"});
+    return;
+  }
+  projectDb.update(req.params.id, req.body)
+    .then(response => {
+      if (!response) {
+        res.status(404)
+          .json({ message: "The project with the specified ID does not exist" });
+      } else {
+        res.status(200);
+      }
+    })
+    .catch(() => {
+      res.status(500)
+        .json({ error: "The project information could not be modified"});
+    });
+});
+
 server.listen(8000, () => console.log('API running on port 8000'));
